@@ -20,9 +20,9 @@ def main():
 
     with open('file.txt') as f:
         content = f.read()
-        print("File content: ", content
+        print("File content: ", content)  # 수정된 부분
 
-    x = lambda a, b a + b
+    x = lambda a, b: a + b  # 수정된 부분
     print("Lambda result: ", x(5, 10))
 
 if __name__ == "__main__":
