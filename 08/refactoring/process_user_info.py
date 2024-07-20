@@ -11,16 +11,8 @@ def create_farewell_message(user_name):
     return f"안녕히 가세요, {user_name}님!"
 
 
-def process_user_info(user):
-    name = user["name"]
-    age = user["age"]
-    city = user["city"]
-
-    welcome_message = f"환영합니다, {name}님! {city}에서 오셨군요!"
-    discount = calculate_discount(age)
-    bye_message = create_farewell_message(name)
-
-    return welcome_message, discount, bye_message
+def create_welcome_message(name, city):
+    return f"환영합니다, {name}님! {city}에서 오셨군요!"
 
 
 def calculate_discount(age):
@@ -32,9 +24,31 @@ def calculate_discount(age):
         return 0
 
 
+class UserInfoProcessor:
+    def __init__(self, user):
+        self.user = user
+
+    def get_welcome_message(self):
+        return create_welcome_message(self.user["name"], self.user["city"])
+
+    def get_discount(self):
+        return calculate_discount(self.user["age"])
+
+    def get_bye_message(self):
+        return create_farewell_message(self.user["name"])
+
+    def process(self):
+        welcome_message = self.get_welcome_message()
+        discount = self.get_discount()
+        bye_message = self.get_bye_message()
+
+        return welcome_message, discount, bye_message
+
+
 def main():
     user = {"name": "지수", "age": 23, "city": "서울"}
-    message, discount, bye_message = process_user_info(user)
+    processor = UserInfoProcessor(user)
+    message, discount, bye_message = processor.process()
     print(message, discount, bye_message)
 
 
