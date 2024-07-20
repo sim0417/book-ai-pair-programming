@@ -7,21 +7,11 @@
 """
 
 
-def create_farewell_message(user_name):
-    return f"안녕히 가세요, {user_name}님!"
-
-
-def create_welcome_message(name, city):
-    return f"환영합니다, {name}님! {city}에서 오셨군요!"
-
-
-def calculate_discount(age):
-    if age < 18:
-        return 0.1  # 10% 할인
-    elif age <= 25:
-        return 0.05  # 5% 할인
-    else:
-        return 0
+class User:
+    def __init__(self, name, age, city):
+        self.name = name
+        self.age = age
+        self.city = city
 
 
 class UserInfoProcessor:
@@ -43,6 +33,33 @@ class UserInfoProcessor:
         bye_message = self.get_bye_message()
 
         return welcome_message, discount, bye_message
+
+
+class DiscountPolicy:
+    def calculate_discount(self, age):
+        if age < 18:
+            return 20  # 20% 할인
+        elif age > 65:
+            return 15  # 15% 할인
+        else:
+            return 0  # 할인 없음
+
+
+def create_farewell_message(user_name):
+    return f"안녕히 가세요, {user_name}님!"
+
+
+def create_welcome_message(name, city):
+    return f"환영합니다, {name}님! {city}에서 오셨군요!"
+
+
+def calculate_discount(age):
+    if age < 18:
+        return 0.1  # 10% 할인
+    elif age <= 25:
+        return 0.05  # 5% 할인
+    else:
+        return 0
 
 
 def main():

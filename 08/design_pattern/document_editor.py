@@ -1,32 +1,36 @@
 class WordDocument:
-   def create(self):
-       print("Word document created.")
+    def create(self):
+        print("Word document created.")
 
+    def get_property(self):
+        print("Font, size, color")
 
-   def get_property(self):
-       print("Font, size, color")
 
 class ExcelDocument:
-   def create(self):
-       print("Excel document created.")
+    def create(self):
+        print("Excel document created.")
 
-
-   def get_property(self):
-       print("Row, column, cell")
-
-
+    def get_property(self):
+        print("Row, column, cell")
 
 
 class DocumentEditor:
-   def new_document(self, doc_type):
-       if doc_type == "word":
-           return WordDocument()
-       elif doc_type == "excel":
-           return ExcelDocument()
-       else:
-           raise ValueError("Unknown document type")
+    document_types = {}
+
+    @classmethod
+    def register_document_type(cls, doc_type, doc_class):
+        cls.document_types[doc_type] = doc_class
+
+    def new_document(self, doc_type):
+        if doc_type in self.document_types:
+            return self.document_types[doc_type]()
+        else:
+            raise ValueError("Unknown document type")
 
 
+# 각 문서 유형을 등록
+DocumentEditor.register_document_type("word", WordDocument)
+DocumentEditor.register_document_type("excel", ExcelDocument)
 
 
 editor = DocumentEditor()
