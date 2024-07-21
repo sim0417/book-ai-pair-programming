@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Afghanistan Daily New COVID-19 Cases</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Date adapter for Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+  </head>
+  <body>
+    <canvas id="myChart"></canvas>
+
+    <script>
+      // CSV 데이터를 파싱하는 함수
+      function parseCSV(csv) {
+        const lines = csv.split("\n");
+        const headers = lines[0].split(",");
+        return lines.slice(1).map((line) => {
+          const values = line.split(",");
+          return headers.reduce((obj, header, index) => {
+            obj[header] = values[index];
+            return obj;
+          }, {});
+        });
+      }
+
+      // 차트 생성 함수
+      function createChart(data) {
+        const ctx = document.getElementById("myChart").getContext("2d");
+        new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: data.map((row) => row.date),
+            datasets: [
+              {
+                label: "New COVID-19 Cases in Afghanistan",
+                data: data.map((row) => row.new_cases),
+                borderColor: "rgb(75, 192, 192)",
+                tension: 0.1,
+              },
+            ],
+          },
+          options: {
+            scales: {
+              x: {
+                type: "time",
+                time: {
+                  parser: "yyyy-MM-dd",
+                },
+              },
+            },
+          },
+        });
+      }
+
+      const initProject = async () => {
+        const fetchData = await fetch("./owid-covid-data-50.csv");
+        const csvData = await fetchData.text();
+
+        // CSV 파싱 및 차트 생성
+        const parsedData = parseCSV(csvData);
+        createChart(parsedData);
+      };
+
+      initProject();
+    </script>
+  </body>
+</html>
