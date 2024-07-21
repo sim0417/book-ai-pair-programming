@@ -13,10 +13,19 @@ router = APIRouter()
 def read_items(
     session: SessionDep, current_user: CurrentUser, skip: int = 0, limit: int = 100
 ) -> Any:
+    # 인라인 챗을 열어서 /doc 을 입려하면 아래와 같이 API에대한 설명을 작성할 수 있다.
     """
-    Retrieve items.
-    """
+    Retrieve a list of items.
 
+    Args:
+        session (SessionDep): The database session dependency.
+        current_user (CurrentUser): The current user object.
+        skip (int, optional): Number of items to skip. Defaults to 0.
+        limit (int, optional): Maximum number of items to retrieve. Defaults to 100.
+
+    Returns:
+        ItemsPublic: An instance of the ItemsPublic class containing the retrieved items and count.
+    """
     if current_user.is_superuser:
         count_statement = select(func.count()).select_from(Item)
         count = session.exec(count_statement).one()
